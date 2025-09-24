@@ -11,7 +11,5 @@ __author__ = "JajmeLesLjcornes"
 
 
 # game_state.py
-class GameValue:
-    dt = 0
-    state = "playing"
-    screen_size = [1280, 720]
+class GameValues:
+    player_speed = 0

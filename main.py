@@ -6,7 +6,7 @@ auteur : JajmeLesLjcornes
 
 import pygame
 from brjck_breaker import keyboard_actions
-from brjck_breaker.game_state import GameValue as GV
+from brjck_breaker.game_settings import GameSettings as GS
 
 
 __author__ = "JajmeLesLjcornes"
@@ -14,9 +14,10 @@ __author__ = "JajmeLesLjcornes"
 
 pygame.init()
 running = True
-screen = pygame.display.set_mode((GV.screen_size[0], GV.screen_size[1]))
+screen = pygame.display.set_mode((GS.screen_size[0], GS.screen_size[1]))
 clock = pygame.time.Clock()
-GV.state = "playing"
+pygame.display.set_caption("Brjck Breaker")
+GS.state = "test"
 key_pressed = set()
 
 
@@ -27,7 +28,7 @@ while running:
     # 1.                Récupérer les événements
     # =========================================================
 
-    GV.dt = clock.tick(60) / 1000
+    GS.dt = clock.tick(60) / 1000
 
     # limits FPS to 60
     # dt = Delta time (Temps écoulé entre deux frames) =>
@@ -37,18 +38,12 @@ while running:
 
         if event.type == pygame.QUIT:  # pygame.QUIT event => clic sur X pour fermer la fenêtre
             running = False
-        print(event)
-        if event.type == pygame.KEYDOWN:
-            print(event.__dict__["scancode"], screen)
-            print(pygame.key.get_pressed()[event.__dict__["key"]])
+        # print(event)
 
         if event.type == pygame.KEYDOWN:
             key_pressed.add(event.__dict__["scancode"])
         if event.type == pygame.KEYUP:
             key_pressed.discard(event.__dict__["scancode"])
-
-    # <Event(769-KeyUp {'unicode': 'q', 'key': 113, 'mod': 0, 'scancode': 4, 'window': None})>
-    # <Event(768-KeyDown {'unicode': 'q', 'key': 113, 'mod': 0, 'scancode': 4, 'window': None})>
 
     # =========================================================
     # 2.    Logique du jeu (déplacements, collisions…)
@@ -62,8 +57,11 @@ while running:
     if key_pressed:
         new_x_pos = player_pos.x + keyboard_actions.player_movement(
             key_pressed)
-        if 0 <= new_x_pos <= GV.screen_size[0]:
+        if 0 <= new_x_pos <= GS.screen_size[0]:
             player_pos.x = new_x_pos
+        else:
+            print(player_pos.x, new_x_pos)
+            player_pos.x = max(0, min(new_x_pos, 1000))
 
     """Todo :
     Faire en sorte de tilter la plateforme pour orienter le rebond
@@ -75,6 +73,14 @@ while running:
     # =========================================================
     screen.fill((0, 0, 0))  # fond noir
     pygame.draw.circle(screen, "red", player_pos, 40)
+
+    # Debug tools | Texte pour afficher la vitesse
+    if GS.debug_tools:
+        font = pygame.font.Font(None, 48)  # 48 = taille en pixels
+        text = font.render(
+            str(GS.debug_stats["speed"]), True, (255, 255, 255))  # (R, G, B)
+
+        screen.blit(text, text.get_rect(center=(400, 300)))
 
     pygame.display.flip()   # met à jour l’écran
 
