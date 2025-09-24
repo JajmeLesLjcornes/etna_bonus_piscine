@@ -13,5 +13,5 @@
 | **Entrée**                           | 40       |                              |
 | **Maj (Shift gauche)**               | 225      |                              |
 | **Ctrl gauche**                      | 224      |                              |
-| **A / Q**                            | 4        | Q en AZERTY, A en QWERTY     |
-| **E**    | 8        | toujours E                   |
+| **Q / A** (haut, 1e touche à gauche) | 20       | A en AZERTY, Q en QWERTY     |
+| **E**                                | 8        | toujours E                   |
