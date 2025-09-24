@@ -27,7 +27,10 @@ while running:
 
         if event.type == pygame.QUIT:  # pygame.QUIT event => clic sur X pour fermer la fenêtre
             running = False
-        print(event.__dict__)
+        print(event)
+        print(event.type)
+        if event.type == pygame.KEYDOWN:
+            print(event.__dict__["scancode"])
 
     # <Event(769-KeyUp {'unicode': 'q', 'key': 113, 'mod': 0, 'scancode': 4, 'window': None})>
     # <Event(768-KeyDown {'unicode': 'q', 'key': 113, 'mod': 0, 'scancode': 4, 'window': None})>
@@ -41,8 +44,6 @@ while running:
         # Mettre en pause le jeu
         # print("La fenêtre n'a plus le focus clavier !")
         pass
-
-    keys = pygame.key.get_pressed()  # Alt G = 256
 
     """Todo :
     Faire en sorte de tilter la plateforme pour orienter le rebond
