@@ -5,32 +5,41 @@ auteur : JajmeLesLjcornes
 
 
 import pygame
+from brjck_breaker import keyboard_actions
+from brjck_breaker.game_state import GameValue as GV
 
 
 __author__ = "JajmeLesLjcornes"
 
 
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
 running = True
-dt = 0
+screen = pygame.display.set_mode((GV.screen_size[0], GV.screen_size[1]))
+clock = pygame.time.Clock()
+GV.state = "playing"
 key_pressed = set()
 
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() - 20)
 
 while running:
     # =========================================================
     # 1.                Récupérer les événements
     # =========================================================
+
+    GV.dt = clock.tick(60) / 1000
+
+    # limits FPS to 60
+    # dt = Delta time (Temps écoulé entre deux frames) =>
+    # Permet de mettre une valeur fixe par seconde pour le déplacement d'un objet par exemple playerpos = 300 * dt
+
     for event in pygame.event.get():  # poll for events
 
         if event.type == pygame.QUIT:  # pygame.QUIT event => clic sur X pour fermer la fenêtre
             running = False
         print(event)
         if event.type == pygame.KEYDOWN:
-            print(event.__dict__["scancode"])
+            print(event.__dict__["scancode"], screen)
             print(pygame.key.get_pressed()[event.__dict__["key"]])
 
         if event.type == pygame.KEYDOWN:
@@ -51,11 +60,10 @@ while running:
         # print("La fenêtre n'a plus le focus clavier !")
         pass
     if key_pressed:
-        if (4 in key_pressed) ^ (7 in key_pressed):
-            if 4 in key_pressed:
-                player_pos.x -= 300 * dt
-            else:
-                player_pos.x += 300 * dt
+        new_x_pos = player_pos.x + keyboard_actions.player_movement(
+            key_pressed)
+        if 0 <= new_x_pos <= GV.screen_size[0]:
+            player_pos.x = new_x_pos
 
     """Todo :
     Faire en sorte de tilter la plateforme pour orienter le rebond
@@ -70,9 +78,5 @@ while running:
 
     pygame.display.flip()   # met à jour l’écran
 
-    # limits FPS to 60
-    # dt = Delta time (Temps écoulé entre deux frames) =>
-    # Permet de mettre une valeur fixe par seconde pour le déplacement d'un objet par exemple playerpos = 300 * dt
-    dt = clock.tick(60) / 1000
 
 pygame.quit()
