@@ -25,5 +25,6 @@ def player_movement(keys: tuple) -> int:
         else:
             return GV.player_speed * GS.dt
     else:
-        GS.debug_stats["speed"], GV.player_speed = 0
-        return 0
+        GS.debug_stats["speed"] = 0
+        GV.player_speed = 0
+        return GV.player_speed
