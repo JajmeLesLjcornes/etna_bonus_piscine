@@ -7,7 +7,9 @@ auteur : JajmeLesLjcornes
 import pygame
 from brjck_breaker import keyboard_actions
 from brjck_breaker.game_settings import GameSettings as GS
-
+from brjck_breaker.game_var import PlayerStats as Pstat
+from brjck_breaker.game_var import LevelStats as Lstat
+from brjck_breaker import draw_module
 
 __author__ = "JajmeLesLjcornes"
 
@@ -20,8 +22,8 @@ pygame.display.set_caption("Brjck Breaker")
 GS.state = "test"
 key_pressed = set()
 
+player = Pstat(screen)
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() - 20)
 
 while running:
     # =========================================================
@@ -55,30 +57,34 @@ while running:
         # print("La fenêtre n'a plus le focus clavier !")
         pass
     if key_pressed:
-        new_x_pos = player_pos.x + keyboard_actions.player_movement(
-            key_pressed)
-        if 0 <= new_x_pos <= GS.screen_size[0]:
-            player_pos.x = new_x_pos
+        new_x_pos = player.pos.x + keyboard_actions.player_movement(
+            key_pressed, player)
+        if 0 <= new_x_pos <= GS.screen_size[0] - player.platform["width"]:
+            player.pos.x = new_x_pos
         else:
-            print(player_pos.x, new_x_pos)
-            player_pos.x = max(0, min(new_x_pos, 1000))
+            print(player.pos.x, new_x_pos)
+            player.pos.x = max(
+                0, min(new_x_pos, 1000 - player.platform["width"]))
 
     """Todo :
     Faire en sorte de tilter la plateforme pour orienter le rebond
     déplacement gauche droite
+    check la direction de déplacement de la plateforme quand la
+    balle tape pour le rebond
     """
 
     # =========================================================
     # 3.                        Dessin
     # =========================================================
     screen.fill((0, 0, 0))  # fond noir
-    pygame.draw.circle(screen, "red", player_pos, 40)
+    draw_module.draw_player_platform(screen, player)
+    draw_module.draw_brick(screen)
 
     # Debug tools | Texte pour afficher la vitesse
     if GS.debug_tools:
         font = pygame.font.Font(None, 48)  # 48 = taille en pixels
         text = font.render(
-            str(GS.debug_stats["speed"]), True, (255, 255, 255))  # (R, G, B)
+            str(GS.debug_stats["current_speed"]), True, (255, 255, 255))
 
         screen.blit(text, text.get_rect(center=(400, 300)))
 

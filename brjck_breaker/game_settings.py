@@ -17,5 +17,5 @@ class GameSettings:
     screen_size = [1000, 750]
     debug_tools = True
     debug_stats = {
-        "speed": 0
+        "current_speed": 0
     }
