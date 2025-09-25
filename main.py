@@ -3,8 +3,10 @@
 auteur : JajmeLesLjcornes
 """
 
-
+import random
+import math
 import pygame
+
 from brjck_breaker import keyboard_actions
 from brjck_breaker.game_settings import GameSettings as GS
 from brjck_breaker.game_var import PlayerStats as Pstat
@@ -23,14 +25,19 @@ pygame.display.set_caption("Brjck Breaker")
 GS.state = "test"
 key_pressed = set()
 
-ball = BallInfo(screen)
+balls = []
+for i in range(8):
+    balls.append(
+        BallInfo(screen, f"test{i}", random.uniform(0.2, 0.8 * math.pi)))
+
+
 player = Pstat(screen)
 test_level = game_var.LevelInfo(
     [
         game_var.BrickInfo("classic_1hp", (0, 0)),
         game_var.BrickInfo("classic_1hp", (1, 0)),
-        game_var.BrickInfo("classic_1hp", (3, 0)),
-        game_var.BrickInfo("classic_1hp", (0, 1)),
+        game_var.BrickInfo("classic_3hp", (3, 0)),
+        game_var.BrickInfo("classic_5hp", (0, 1)),
         game_var.BrickInfo("classic_1hp", (10, 1)),
         game_var.BrickInfo("classic_1hp", (9, 1)),
         game_var.BrickInfo("classic_1hp", (1, 2)),
@@ -90,7 +97,10 @@ while running:
     screen.fill((0, 0, 0))  # fond noir
     draw_module.draw_player_platform(screen, player)
     test_level.draw_level(screen)
-    ball.draw(screen)
+
+    for ball in balls:
+        ball.ball_movement()
+        ball.draw(screen)
     # Debug tools | Texte pour afficher la vitesse
     if GS.debug_tools:
         font = pygame.font.Font(None, 48)  # 48 = taille en pixels

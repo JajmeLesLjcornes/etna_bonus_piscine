@@ -12,5 +12,7 @@ __author__ = "JajmeLesLjcornes"
 
 def draw_player_platform(screen, player: Pstat):
     pygame.draw.rect(screen, "blue",
-                     (player.pos.x, player.pos.y, 150, 25)
+                     (player.pos.x, player.pos.y,
+                      player.platform["width"],
+                      player.platform["height"])
                      )
