@@ -5,6 +5,7 @@ auteur : JajmeLesLjcornes
 
 
 import pygame
+from random import randint
 
 
 __author__ = "JajmeLesLjcornes"
@@ -44,8 +45,12 @@ class BrickInfo:
         pass
 
     def draw(self, screen):
-        pixel_pos = (self.pos[0] * 100, self.pos[1] * 25)
-        pygame.draw.rect(screen, (200, 0, 100), self.brick.move(pixel_pos))
+        if self.pos[1] % 2 == 0:
+            pixel_pos = (self.pos[0] * 100, self.pos[1] * 25)
+        else:
+            pixel_pos = (self.pos[0] * 100 - 50, self.pos[1] * 25)
+        pygame.draw.rect(screen, (200, randint(0, 255), 100),
+                         self.brick.move(pixel_pos))
 
 
 class LevelInfo:
