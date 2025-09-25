@@ -8,7 +8,7 @@ import pygame
 from brjck_breaker import keyboard_actions
 from brjck_breaker.game_settings import GameSettings as GS
 from brjck_breaker.game_var import PlayerStats as Pstat
-from brjck_breaker.game_var import LevelStats as Lstat
+from brjck_breaker import game_var
 from brjck_breaker import draw_module
 
 __author__ = "JajmeLesLjcornes"
@@ -23,7 +23,15 @@ GS.state = "test"
 key_pressed = set()
 
 player = Pstat(screen)
-
+test_level = game_var.LevelInfo(
+    [
+        game_var.BrickInfo("classic_1hp", (0, 0)),
+        game_var.BrickInfo("classic_1hp", (1, 0)),
+        game_var.BrickInfo("classic_1hp", (3, 0)),
+        game_var.BrickInfo("classic_1hp", (0, 1)),
+        game_var.BrickInfo("classic_1hp", (1, 2)),
+    ]
+)
 
 while running:
     # =========================================================
@@ -62,7 +70,6 @@ while running:
         if 0 <= new_x_pos <= GS.screen_size[0] - player.platform["width"]:
             player.pos.x = new_x_pos
         else:
-            print(player.pos.x, new_x_pos)
             player.pos.x = max(
                 0, min(new_x_pos, 1000 - player.platform["width"]))
 
@@ -78,8 +85,7 @@ while running:
     # =========================================================
     screen.fill((0, 0, 0))  # fond noir
     draw_module.draw_player_platform(screen, player)
-    draw_module.draw_brick(screen)
-
+    test_level.draw_level(screen)
     # Debug tools | Texte pour afficher la vitesse
     if GS.debug_tools:
         font = pygame.font.Font(None, 48)  # 48 = taille en pixels

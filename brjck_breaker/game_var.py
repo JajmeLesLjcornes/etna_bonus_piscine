@@ -35,18 +35,25 @@ brick_type = {
 
 
 class BrickInfo:
+    brick = pygame.Rect(0, 0, 100, 25)
+
     def __init__(self, type: str, pos: tuple):
         self.type = type
-        self.pos = pos
+        self.pos = pos  # (x, y)
         self.hp = brick_type[type]
         pass
 
+    def draw(self, screen):
+        pixel_pos = (self.pos[0] * 100, self.pos[1] * 25)
+        pygame.draw.rect(screen, (200, 0, 100), self.brick.move(pixel_pos))
 
-class LevelStats:
-    def __init__(self, brick_list: list):
+
+class LevelInfo:
+
+    def __init__(self, brick_list: list[BrickInfo]):
         self.brick_list = brick_list
         pass
 
-
-class Bidule:
-    truc = 0
+    def draw_level(self, screen):
+        for brick in self.brick_list:
+            brick.draw(screen)
